@@ -53,6 +53,8 @@ services:
         condition: service_healthy
     ports:
       - "${CLIENT_PORT:-5173}:80"
+    environment:
+      - VITE_API_URL=http://16.176.130.30:5193
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80"]
