@@ -29,7 +29,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__Default: ${DB_CONNECTION_STRING:-Server=db;Port=3306;Database=emo_db;User Id=tru123;Password=tru12345;SslMode=None;}
+      ConnectionStrings__Default: ${DB_CONNECTION_STRING:-Server=localhost;Port=3306;Database=emo_db;User Id=nhan1;Password=372408Nhan;SslMode=None;}
       Jwt__Issuer: ${JWT_ISSUER:-EmoApi}
       Jwt__Audience: ${JWT_AUDIENCE:-EmoClient}
       Jwt__Secret: ${JWT_SECRET:-CHANGE_ME_SUPER_SECRET_MIN_32_CHARS_1234567}
