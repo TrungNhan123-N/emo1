@@ -1,0 +1,71 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: emo-mysql-db
+    environment:
+      MYSQL_DATABASE: emo_db
+      MYSQL_USER: tru123
+      MYSQL_PASSWORD: tru12345
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - emo-network
+
+  api:
+    image: ${DOCKER_USERNAME}/webshop-api:latest
+    container_name: emo-backend-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Default: ${DB_CONNECTION_STRING:-Server=db;Port=3306;Database=emo_db;User Id=tru123;Password=tru12345;SslMode=None;}
+      Jwt__Issuer: ${JWT_ISSUER:-EmoApi}
+      Jwt__Audience: ${JWT_AUDIENCE:-EmoClient}
+      Jwt__Secret: ${JWT_SECRET:-CHANGE_ME_SUPER_SECRET_MIN_32_CHARS_1234567}
+    ports:
+      - "${API_PORT:-5193}:8080"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSL http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 80s
+    networks:
+      - emo-network
+
+  client:
+    image: ${DOCKER_USERNAME}/webshop-client:latest
+    container_name: emo-frontend-client
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${CLIENT_PORT:-5173}:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - emo-network
+
+networks:
+  emo-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
