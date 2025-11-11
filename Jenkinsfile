@@ -8,7 +8,7 @@ pipeline {
   parameters {
     string(name: 'REPO_URL', defaultValue: 'https://github.com/TrungNhan123-N/emo1.git', description: 'Git repository URL')
     string(name: 'GIT_BRANCH', defaultValue: 'master', description: 'Git branch to build')
-    string(name: 'SERVER_HOST', defaultValue: '18.143.155.245', description: 'Target server IP or hostname')
+    string(name: 'SERVER_HOST', defaultValue: '16.176.130.30', description: 'Target server IP or hostname')
     string(name: 'SERVER_USER', defaultValue: 'ubuntu', description: 'SSH username on target server')
     string(name: 'SSH_PORT', defaultValue: '22', description: 'SSH port on target server')
     string(name: 'API_PORT', defaultValue: '5193', description: 'Public API port on server')
