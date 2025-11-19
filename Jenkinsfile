@@ -229,7 +229,7 @@ pipeline {
             # Build .env (values can be overridden via env when invoking this script)
             cat > .env <<ENVEOF
             DOCKER_USERNAME=$DOCKER_USER
-            DB_CONNECTION_STRING=${DB_CONNECTION_STRING:-Server=db;Port=3306;Database=emo_db;User Id=tru123;Password=tru12345;SslMode=None;}
+            DB_CONNECTION_STRING=${DB_CONNECTION_STRING:-Server=db;Port=3306;Database=emo_db;User Id=nhan1;Password=372408Nhan!;SslMode=None;}
             JWT_SECRET=${JWT_SECRET:-CHANGE_ME_SUPER_SECRET_MIN_32_CHARS_1234567}
             ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
             API_PORT=${API_PORT:-5193}
