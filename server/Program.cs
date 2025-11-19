@@ -1,5 +1,6 @@
 using MySqlConnector;
 using System.Data;
+using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -12,15 +13,30 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 // CORS for local frontend dev (Vite/CRA)
-var allowedOrigins = new[]
+// Allow configuring allowed origins via environment variable `FRONTEND_ALLOWED_ORIGINS`.
+// Format: comma- or semicolon-separated list, e.g. "http://host:5173,http://other:5173"
+var allowedOriginsEnv = Environment.GetEnvironmentVariable("FRONTEND_ALLOWED_ORIGINS");
+string[] allowedOrigins;
+if (!string.IsNullOrWhiteSpace(allowedOriginsEnv))
 {
-    "http://localhost:5173",
-    "https://localhost:5173",
-    "http://localhost:3000",
-    "https://localhost:3000",
-    "http://47.128.79.251:5173",
-    "http://18.143.155.245:5173"
-};
+    allowedOrigins = allowedOriginsEnv
+        .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+        .Select(s => s.Trim())
+        .Where(s => !string.IsNullOrWhiteSpace(s))
+        .ToArray();
+}
+else
+{
+    allowedOrigins = new[]
+    {
+        "http://localhost:5173",
+        "https://localhost:5173",
+        "http://localhost:3000",
+        "https://localhost:3000",
+        "http://47.128.79.251:5173",
+        "http://18.143.155.245:5173"
+    };
+}
 
 builder.Services.AddCors(options =>
 {
